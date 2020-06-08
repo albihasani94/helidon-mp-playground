@@ -16,6 +16,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.albi.helidon.mp.jpa.service.GreetingService;
 import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
 import org.eclipse.microprofile.openapi.annotations.media.Content;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
@@ -31,6 +32,9 @@ public class GreetResource {
 
     @Inject
     GreetingProvider greetingProvider;
+
+    @Inject
+    GreetingService greetingService;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -72,6 +76,13 @@ public class GreetResource {
 
         greetingProvider.setMessage(newGreeting);
         return Response.status(Response.Status.NO_CONTENT).build();
+    }
+
+    @GET
+    @Path("withSalutation/{salutation}")
+    @Produces("text/plain")
+    public String getResponse(@PathParam("salutation") String salutation) {
+        return greetingService.findBySalutation(salutation);
     }
 
     private JsonObject createResponse(String who) {
