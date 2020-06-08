@@ -12,7 +12,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-@Path("tables")
+@Path("/ds")
 @ApplicationScoped
 public class DataSourceExample {
 
@@ -21,6 +21,7 @@ public class DataSourceExample {
     private DataSource testDataSource;
 
     @GET
+    @Path("tables")
     @Produces("text/plain")
     public String getTableNames() throws SQLException {
         StringBuilder sb = new StringBuilder();
