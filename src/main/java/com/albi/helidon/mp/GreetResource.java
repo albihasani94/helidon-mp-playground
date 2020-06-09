@@ -16,7 +16,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.albi.helidon.mp.jpa.model.Greeting;
 import com.albi.helidon.mp.jpa.service.GreetingService;
+import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
 import org.eclipse.microprofile.openapi.annotations.media.Content;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
@@ -81,6 +83,9 @@ public class GreetResource {
     @GET
     @Path("withSalutation/{salutation}")
     @Produces("text/plain")
+    @Operation(summary = "Returns a greeting", description = "Returns a greeting for the given salutation")
+    @APIResponse(description = "Text containing the greeting",
+            content = @Content(mediaType = MediaType.TEXT_PLAIN, schema = @Schema(implementation = Greeting.class)))
     public String getResponse(@PathParam("salutation") String salutation) {
         return greetingService.findBySalutation(salutation);
     }
