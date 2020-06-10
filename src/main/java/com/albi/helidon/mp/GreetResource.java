@@ -1,30 +1,21 @@
 package com.albi.helidon.mp;
 
-import java.util.Collections;
-
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Inject;
-import javax.json.Json;
-import javax.json.JsonBuilderFactory;
-import javax.json.JsonObject;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-
-import com.albi.helidon.mp.jpa.model.Greeting;
-import com.albi.helidon.mp.jpa.service.GreetingService;
-import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
 import org.eclipse.microprofile.openapi.annotations.media.Content;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
+
+import javax.enterprise.context.RequestScoped;
+import javax.inject.Inject;
+import javax.json.Json;
+import javax.json.JsonBuilderFactory;
+import javax.json.JsonObject;
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import java.util.Collections;
 
 @Path("/greet")
 @RequestScoped
@@ -34,9 +25,6 @@ public class GreetResource {
 
     @Inject
     GreetingProvider greetingProvider;
-
-    @Inject
-    GreetingService greetingService;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -78,16 +66,6 @@ public class GreetResource {
 
         greetingProvider.setMessage(newGreeting);
         return Response.status(Response.Status.NO_CONTENT).build();
-    }
-
-    @GET
-    @Path("withSalutation/{salutation}")
-    @Produces("text/plain")
-    @Operation(summary = "Returns a greeting", description = "Returns a greeting for the given salutation")
-    @APIResponse(description = "Text containing the greeting",
-            content = @Content(mediaType = MediaType.TEXT_PLAIN, schema = @Schema(implementation = Greeting.class)))
-    public String getResponse(@PathParam("salutation") String salutation) {
-        return greetingService.findBySalutation(salutation);
     }
 
     private JsonObject createResponse(String who) {
